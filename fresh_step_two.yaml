@@ -1,0 +1,55 @@
+#!/usr/bin/env ansible-playbook
+- name: clean init of rpi
+  hosts: wurzelMasters wurzelNodes
+  remote_user: wuerzelchen
+  gather_facts: no
+  vars:
+    upgrade_packages: safe
+    update_cache: yes
+    autoremove_packages: yes
+    autoclean_packages: yes
+  tasks:
+   - name: cleanup default pi user
+     become: true
+     user:
+       name: pi
+       state: absent
+       remove: yes
+   - name: update apt
+     become: true
+     apt: 
+       update_cache: "{{ update_cache }}"
+   - name: upgrade packages
+     become: true
+     apt:
+       upgrade: "{{ upgrade_packages }}"
+   - name: autoremove packages
+     become: true
+     apt:
+       autoremove: "{{ autoremove_packages }}"
+   - name: autoclean packages
+     become: true
+     apt:
+       autoclean: "{{ autoclean_packages }}"
+   - name: Disallow password authentication / SSH
+     become: true
+     lineinfile:
+       dest: /etc/ssh/sshd_config
+       regexp: "^PasswordAuthentication"
+       line: "PasswordAuthentication no"
+       state: present
+     notify: Restart ssh
+   - name: Disallow root SSH access
+     become: true
+     lineinfile:
+       dest: /etc/ssh/sshd_config
+       regexp: "^PermitRootLogin"
+       line: "PermitRootLogin no"
+       state: present
+     notify: Restart ssh
+  handlers:
+    - name: Restart ssh
+      become: true
+      service:
+        name: ssh
+        state: restarted
