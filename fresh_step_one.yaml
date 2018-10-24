@@ -9,6 +9,11 @@
   tasks:
     - name: check connectivity
       ping:
+    - name: enable ssh on startup
+      systemd:
+        state: started
+        enabled: yes
+        name: ssh
     - name: update root passwd from vault
       become: yes
       user:
