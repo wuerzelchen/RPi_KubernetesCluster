@@ -2,6 +2,13 @@
 This is a PoC for a fully automated setup of a Kubernetes Cluster on Raspberry Pi
 
 first things first
+if you have a fresh ubuntu on your wsl and no ansible installed:
+https://docs.ansible.com/ansible/2.7/installation_guide/intro_installation.html#latest-releases-via-apt-ubuntu
+$ sudo apt-get update
+$ sudo apt-get install software-properties-common
+$ sudo apt-add-repository --yes --update ppa:ansible/ansible
+$ sudo apt-get install ansible
+
 Get your raspberry image
 Add a plain file on the ssd which is called ssh. This lets you enable ssh on the first boot, so you can work with your headless nodes without getting an hdmi cable, a monitor and an extra keyboard.
 
