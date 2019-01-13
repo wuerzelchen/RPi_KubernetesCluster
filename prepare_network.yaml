@@ -1,0 +1,35 @@
+#!/usr/bin/env ansible-playbook
+- name: prepare network
+  hosts: wurzelMasters wurzelNodes
+  remote_user: pi
+  gather_facts: no
+  tasks:
+    - name: check connectivity
+      ping:
+    - name: set networkd settings
+      become: yes
+      shell: |
+        echo '[Match]
+          Name=eth0
+
+          [Network]
+          DHCP=ipv6
+          #DHCP=yes
+          #DNSSEC=true
+          #IPForward=ipv6
+          #IPv6AcceptRA=true' > /etc/systemd/network/20-wired.network
+      notify: restart service networkd
+  handlers:
+    - name: restart service networkd
+      become: yes
+      service: 
+        name: systemd-networkd
+        enabled: yes
+        state: restarted
+      notify: disable and stop networking
+    - name: disable and stop networking
+      become: yes
+      service:
+        name: networking
+        enabled: no
+        state: stopped
