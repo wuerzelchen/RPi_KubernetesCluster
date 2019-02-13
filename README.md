@@ -30,3 +30,32 @@ ansible_connection=ssh
 #add for the first step:  
 ansible_ssh_user=pi  
 ansible_ssh_password=raspberry  
+
+
+
+
+thoughts about ivp6:
+enable ipv6 fowarding
+enable ipv6 RA //when ipv6 forwarding enabled is, this option has to be set explicitly
+enable ipv6proxyndp //docker container should get their own ipv6 address via RA
+
+docker daemon.json
+ipv6 true
+fixed ipv6 subnet //I set the prefix which I get from my router
+
+dns/ping doesn't work currently
+result: install ndppd for forwarding the RA from eth0 to docker0, that the container also can react to RA
+/etc/ndppd.conf
+proxy eth0 {
+  rule 2a02:8070:18a:200::a0/125 { auto }
+}
+
+
+kubeadm_v6.cfg
+apiVersion: kubeadm.k8s.io/v1alpha3
+kind: MasterConfiguration
+api:
+  advertiseAddress: fd00::100
+networking:
+  serviceSubnet: fd00:1234::/110
+nodeName: kube-master
