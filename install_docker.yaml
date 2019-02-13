@@ -1,0 +1,11 @@
+#!/usr/bin/env ansible-playbook
+- name: install docker
+  hosts: wurzelMasters wurzelNodes
+  remote_user: pi
+  gather_facts: no
+  tasks:
+    - name: check connectivity
+      ping:
+    - name: install packages
+      become: yes
+      shell: curl -sSL get.docker.com | sh && \ sudo usermod pi -aG docker
