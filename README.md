@@ -24,6 +24,12 @@ groups_vars
 - hostGroupNodes  
 -- vault  
 
+the content has to be in the format:
+varName: string
+
+for the user password what we want to store in the vault, we need to crypt the value. Documented here: https://docs.ansible.com/ansible/latest/modules/user_module.html
+How to create crypted passwords for user module? https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module
+
 In the ansible hosts file  
 [all:vars]  
 ansible_connection=ssh  
