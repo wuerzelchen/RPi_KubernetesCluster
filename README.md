@@ -38,6 +38,22 @@ ansible_ssh_user=pi
 ansible_ssh_password=raspberry  
 
 
+fresh step two:
+start ssh agent
+eval $(ssh-agent -s)
+add your key to the agent
+ssh-add ~/.ssh/id_rsa
+
+after that you'll be able to run the second steps with the playbook
+
+
+
+
+
+!important for ARM based cluster (RPi)
+Kubernetes Dashboard (ARM) $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard-arm.yaml (https://github.com/kubernetes/dashboard/wiki/Installation)
+
+
 
 
 thoughts about ivp6:

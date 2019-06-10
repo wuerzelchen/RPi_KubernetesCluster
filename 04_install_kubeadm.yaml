@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 - name: prepare kubernetes installation
   hosts: wurzelMasters wurzelNodes
-  remote_user: pi
+  remote_user: wuerzelchen
   gather_facts: no
   tasks:
     - name: check connectivity

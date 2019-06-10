@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 - name: install docker
   hosts: wurzelMasters wurzelNodes
-  remote_user: pi
+  remote_user: wuerzelchen
   gather_facts: no
   tasks:
     - name: check connectivity

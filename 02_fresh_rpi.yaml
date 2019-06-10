@@ -9,12 +9,15 @@
     autoremove_packages: yes
     autoclean_packages: yes
   tasks:
+   - name: check connectivity
+     ping:
    - name: cleanup default pi user
      become: true
      user:
        name: pi
        state: absent
        remove: yes
+     ignore_errors: yes
    - name: update apt
      become: true
      apt: 
