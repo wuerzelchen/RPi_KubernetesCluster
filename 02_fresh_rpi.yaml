@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 - name: clean init of rpi
-  hosts: wurzelMasters wurzelNodes
+  hosts: masterNodes workerNodes
   remote_user: wuerzelchen
   gather_facts: no
   vars:
@@ -11,6 +11,10 @@
   tasks:
    - name: check connectivity
      ping:
+   - name: change hostname
+     become: true
+     hostname:
+       name: "{{ inventory_hostname }}"
    - name: cleanup default pi user
      become: true
      user:

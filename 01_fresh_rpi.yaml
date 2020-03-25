@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 - name: setup logins and secure sshd
-  hosts: wurzelMasters wurzelNodes
+  hosts: masterNodes workerNodes
   remote_user: pi
   gather_facts: no
   vars:
@@ -33,3 +33,18 @@
         user: "{{ username }}"
         state: present
         key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+      notify: reboot
+  handlers:
+    - name: reboot
+      become: yes
+      shell: "sleep 5 && reboot"
+      async: 1
+      poll: 0
+      notify: wait
+    - name: wait
+      wait_for_connection:
+        connect_timeout: 20
+        sleep: 5
+        delay: 5
+        timeout: 300
+      
