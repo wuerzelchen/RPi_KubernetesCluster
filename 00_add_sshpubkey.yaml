@@ -1,0 +1,15 @@
+#!/usr/bin/env ansible-playbook
+- name: setup further ssh logins
+  hosts: masterNodes workerNodes
+  remote_user: wuerzelchen
+  gather_facts: no
+  vars:
+    username: wuerzelchen
+  tasks:
+    - name: check connectivity
+      ping:
+    - name: adding authorized_key for {{ username }}
+      authorized_key:
+        user: "{{ username }}"
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/{{ username }}.pub') }}"
