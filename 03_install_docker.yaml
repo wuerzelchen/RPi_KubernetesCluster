@@ -6,6 +6,10 @@
   tasks:
     - name: check connectivity
       ping:
+    - name: get packages
+      get_url:
+        url: https://get.docker.com
+        dest: ./docker_install.sh
     - name: install packages
       become: yes
-      shell: curl -sSL get.docker.com | sh && \ sudo usermod wuerzelchen -aG docker
+      shell: sh ./docker_install.sh && \ sudo usermod wuerzelchen -aG docker

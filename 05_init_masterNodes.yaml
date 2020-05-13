@@ -1,0 +1,50 @@
+- name: setup masterNodes
+  hosts: masterNodes
+  remote_user: wuerzelchen
+  gather_facts: yes
+  vars:
+    masterNodes_ip: "{{ hostvars[groups['masterNodes'][0]]['ansible_default_ipv4'].address | default(groups['masterNodes'][0]) }}"
+    k8s_version: 1.18.0
+    podSubnet: 172.16.0.0/16
+  tasks:
+  - name: generate token
+    command: kubeadm token generate
+    register: kubeadm_token
+    run_once: true
+  - name: debug
+    debug:
+      var: kubeadm_token['stdout']
+
+ - name: init cluster with kubeadm
+   become: yes
+   shell: |
+       kubeadm \
+       init \  
+       --kubernetes-version {{ k8s_version }} \
+       --pod-network-cidr {{ podSubnet }} \
+       --token {{ kubeadm_token['stdout'] }} \
+       --apiserver-advertise-address {{ masterNodes_ip }} \
+    notify: init_cluster
+  - name: Create Kubernetes config directory 
+    file:
+      path: ".kube/"
+      state: directory
+  handlers:
+    - name: init_cluster
+      copy:
+        src: "{{ kubeadmin_config }}"
+        dest: ".kube/config"
+        owner: "{{ ansible_user | default(ansible_user_id) }}"
+        group: "{{ ansible_user | default(ansible_user_id) }}"
+        mode: 0755
+        remote_src: true
+#- hosts: workerNodes
+#  remote_user: wuerzelchen
+#  gather_facts: no
+#  vars:
+#    masterNodes_ip: "{{ hostvars[groups['masterNodes'][0]]['ansible_default_ipv4'].address | default(groups['masterNodes'][0]) }}
+#  tasks:
+#    - name: Join to Kubernetes cluster
+#      command: kubeadm join --token {{ token }} \
+#                  --discovery-token-unsafe-skip-ca-verification \
+#                  {{ masterNodes_ip }}:6443
