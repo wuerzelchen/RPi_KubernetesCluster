@@ -8,10 +8,16 @@
     podSubnet: 172.16.0.0/16
     kubeadmin_config: /etc/kubernetes/admin.conf
   tasks:
+  - name: Check that "{{ kubeadmin_config }}" exists
+    stat:
+      path: "{{ kubeadmin_config }}"
+    register: k8s_initialized
+
   - name: generate token
     command: kubeadm token generate
     register: kubeadm_token
     run_once: true
+    when: not kubeadmin_config
   - name: init cluster with kubeadm
     become: yes
     shell: |
@@ -22,10 +28,12 @@
         --token {{ kubeadm_token['stdout'] }} \
         --apiserver-advertise-address {{ masterNodes_ip }} \
     notify: init_cluster
+    when: not kubeadmin_config
   - name: Create Kubernetes config directory 
     file:
       path: "~/.kube/"
       state: directory
+    when: not kubeadmin_config
   handlers:
     - name: init_cluster
       become: yes
