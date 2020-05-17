@@ -12,20 +12,15 @@
     command: kubeadm token generate
     register: kubeadm_token
     run_once: true
-    notify: init_cluster
-  - name: debug
-    debug:
-      var: kubeadm_token['stdout']
-
-# - name: init cluster with kubeadm
-#   become: yes
-#   shell: |
-#      kubeadm \
-#       init \  
-#       --kubernetes-version {{ k8s_version }} \
-#       --pod-network-cidr {{ podSubnet }} \
-#       --token {{ kubeadm_token['stdout'] }} \
-#       --apiserver-advertise-address {{ masterNodes_ip }} \
+  - name: init cluster with kubeadm
+    become: yes
+    shell: |
+        kubeadm \
+        init \  
+        --kubernetes-version {{ k8s_version }} \
+        --pod-network-cidr {{ podSubnet }} \
+        --token {{ kubeadm_token['stdout'] }} \
+        --apiserver-advertise-address {{ masterNodes_ip }} \
     notify: init_cluster
   - name: Create Kubernetes config directory 
     file:
