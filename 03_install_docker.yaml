@@ -13,3 +13,21 @@
     - name: install packages
       become: yes
       shell: sh ./docker_install.sh && \ sudo usermod wuerzelchen -aG docker
+    - name: perpare docker daemon for k8s
+      become: yes
+      shell: |
+        cat > /etc/docker/daemon.json <<EOF 
+        { 
+          "exec-opts": ["native.cgroupdriver=systemd"], 
+          "log-driver": "json-file", 
+          "log-opts": { 
+            "max-size": "100m" 
+          }
+        } 
+        EOF
+    - name: restart service docker
+      become: true
+      systemd:
+        state: restarted
+        daemon_reload: yes
+        name: docker
