@@ -8,7 +8,7 @@
       ping:
     - name: prepare swapfile
       become: yes
-      shell: dphys-swapfile swapoff && dphys-swapfile uninstall && update-rc.d dphys-swapfile remove
+      shell: dphys-swapfile swapoff && dphys-swapfile uninstall && update-rc.d dphys-swapfile remove && systemctl disable dphys-swapfile.service
 # Only needed if not already configured in your nfs setup
 #      - name: append boot options
 #      become: yes
