@@ -94,7 +94,9 @@ ansible-playbook 02_fresh_rpi.yaml --ask-vault-pass -K
 !important for ARM based cluster (RPi)
 Kubernetes Dashboard (ARM) $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard-arm.yaml (https://github.com/kubernetes/dashboard/wiki/Installation)
 
-
+!important for iptables version 1.8
+You need to allow forward rules in iptables https://docs.oracle.com/cd/E52668_01/E88884/html/kube_admin_config_iptables.html
+https://github.com/kubernetes/kubernetes/issues/71305
 
 
 thoughts about ivp6:
