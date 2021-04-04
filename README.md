@@ -23,7 +23,7 @@ masterNode1 ansible_host=192.168.1.50
 [workerNodes]  
 workerNode1 ansible_host=192.168.1.60
 ```
-Add var folders in `/etc/ansible/groups_vars/[masterNodes | workerNodes | all]` and put there some ansible encrypted vaults into it (those vars will be used in the playbooks)  
+Add var folders in `/etc/ansible/group_vars/[masterNodes | workerNodes | all]` and put there some ansible encrypted vaults into it (those vars will be used in the playbooks)  
 groups_vars  
 - masterNodes  
 -- vault  
