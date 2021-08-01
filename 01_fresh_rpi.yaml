@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 - name: setup logins and secure sshd
-  hosts: masterNodes workerNodes
+  hosts: RPis
   remote_user: pi
   gather_facts: no
   vars:
@@ -33,7 +33,27 @@
         user: "{{ username }}"
         state: present
         key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
-      notify: reboot
+      notify:
+      - reboot
+    - name: add log2ram gpg keys to apt
+      become: true
+      ansible.builtin.apt_key:
+        url: https://azlux.fr/repo.gpg.key
+        state: present
+    - name: add log2ram repo to apt list
+      become: true
+      ansible.builtin.apt_repository:
+        repo: deb http://packages.azlux.fr/debian/ buster main
+        state: present
+        filename: azlux.list
+   - name: install log2ram
+      ansible.builtin.apt:
+        name: log2ram
+        state: present
+      become: true
+      notify:
+      - reboot
+
   handlers:
     - name: reboot
       become: yes

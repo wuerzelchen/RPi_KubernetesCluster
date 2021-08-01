@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 - name: setup further ssh logins
-  hosts: masterNodes workerNodes
+  hosts: RPis
   remote_user: wuerzelchen
   gather_facts: no
   vars:
