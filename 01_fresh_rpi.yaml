@@ -46,7 +46,7 @@
         repo: deb http://packages.azlux.fr/debian/ buster main
         state: present
         filename: azlux.list
-   - name: install log2ram
+    - name: install log2ram
       ansible.builtin.apt:
         name: log2ram
         state: present
