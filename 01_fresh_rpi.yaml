@@ -6,6 +6,7 @@
   vars:
     username: wuerzelchen
     user_groups: [ sudo ]
+    log2ram_partitionsize: 100M
   tasks:
     - name: check connectivity
       ping:
@@ -53,6 +54,13 @@
       become: true
       notify:
       - reboot
+    - name: set log2ram partition size
+      become: true
+      lineinfile:
+        dest: /etc/log2ram.conf
+        regexp: "^SIZE="
+        line: "SIZE={{ log2ram_partitionsize }}"
+        state: present
 
   handlers:
     - name: reboot
